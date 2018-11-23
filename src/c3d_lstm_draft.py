@@ -10,10 +10,8 @@ DATA_FOLDER = r'../data/'
 BATCH_SIZE = 4
 NUMBERS_OF_CLIPS = 8
 CLIP_SIZE = 16
-
 HEIGHT = 112
 WIDTH = 112
-# random.seed(17)
 
 markup = list()
 with open(os.path.join(DATA_FOLDER, 'markup.txt'), 'r') as file_stream:
@@ -43,7 +41,6 @@ for frame in frames:
 train_frames = frames[10000:]
 test_frames = frames[:10000]
 
-
 def get_batch():
     x_batch = np.empty((BATCH_SIZE, NUMBERS_OF_CLIPS, CLIP_SIZE, HEIGHT, WIDTH, 3))
     y_batch = np.empty((BATCH_SIZE, NUMBERS_OF_CLIPS, 1))
@@ -70,7 +67,6 @@ def get_batch():
 # NETWORK
 X = tf.placeholder(tf.float32, shape=(None, NUMBERS_OF_CLIPS, CLIP_SIZE, HEIGHT, WIDTH, 3))
 y = tf.placeholder(tf.float32, shape=(None, NUMBERS_OF_CLIPS, 1))
-
 
 def c3d_lstm(inputs, previous_prediction, previous_state):
     with tf.variable_scope('c3d_lstm', reuse=tf.AUTO_REUSE):
@@ -234,49 +230,9 @@ optimizer = tf.train.AdamOptimizer(0.1).minimize(total_loss)
 
 
 with tf.Session() as sess:
-    # loss = 0.
     sess.run(tf.global_variables_initializer())
-    # x_batch, y_batch = get_batch()
-    # logit, prediction, state = sess.run([logit, prediction, state], feed_dict={X: x_batch, y: y_batch})
 
     for i in range(1, 501):
         x_batch, y_batch = get_batch()
         batch_loss, _ = sess.run([total_loss, optimizer], feed_dict={X: x_batch, y: y_batch})
-        # loss += batch_loss
         print(i, batch_loss)
-
-    a = 4
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
